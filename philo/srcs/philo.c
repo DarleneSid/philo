@@ -6,13 +6,13 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/05/30 18:23:10 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/06/12 17:47:30 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long int	gettodaystime( void )
+long int	gettodaystime(void)
 {
 	struct timeval	current;
 
@@ -29,17 +29,23 @@ void	*process_func(void *arg)
 	philo = (t_philo *)arg;
 	// pthread_mutex_lock(&mutex);
 	// some actions inside
-	// while (1)
-		/* code */
-		while (1)
-		{
-			pthread_mutex_lock(&philo->data->print);
-			printf("[%ld] %i\n", gettodaystime() - philo->data->set_to_zero, philo->id); //("my id is %i\n", philo->id);
-			usleep(100000);// printf("%i\n", philo->id); //("my id is %i\n", philo->id);
-			pthread_mutex_unlock(&philo->data->print);
-		}
+	while (1)
+	{
+		pthread_mutex_lock(&philo->data->print);
+		printf("[%ld] %i\n", gettodaystime() - philo->data->set_to_zero, philo->id); //("my id is %i\n", philo->id);
+		usleep(100000);// printf("%i\n", philo->id); //("my id is %i\n", philo->id);
+		pthread_mutex_unlock(&philo->data->print);
+	}
 	// pthread_mutex_unlock(&mutex);
 	return (0);
+}
+
+void	init(t_data *data, char **av)
+{
+	data->t_t_die = ft_atoi(av[2]);
+	data->t_t_sleep = ft_atoi(av[3]);
+	data->t_t_eat = ft_atoi(av[4]);
+	data->max_eat = ft_atoi(av[5]);
 }
 
 int	main(int ac, char **av)
@@ -49,25 +55,23 @@ int	main(int ac, char **av)
 	//each philo should be a thread
 	int	i;
 	char *str = "hello";
-
-	printf("%li\n", gettodaystime());
-	
-	if (ac < 5 || ac > 6)
+	//printf("%li\n", gettodaystime());
+	if (ac != 6)
 		return (printf("NOT VALID AMOUNT OF ARGUMENTS\n"), 1);
 	if (check_valid_args(av))
 		exit(1);
-	data.nbphilo = ft_atoi(av[1]);
-	philo = calloc(sizeof(t_philo), data.nbphilo);
+	data.nb_philo = ft_atoi(av[1]);
+	philo = calloc(sizeof(t_philo), data.nb_philo);
 	if (!philo)
 		return (1);
-	data.phils = malloc(sizeof(pthread_t) * data.nbphilo);
+	data.phils = malloc(sizeof(pthread_t) * data.nb_philo);
 	if (!data.phils)
 		return (free(philo), 1);
 	i = 0;
 	data.set_to_zero = gettodaystime();
 	data.philo = philo;
 	pthread_mutex_init(&data.print, NULL);
-	while (i < data.nbphilo)
+	while (i < data.nb_philo)
 	{
 		philo[i].id = i + 1;
 		philo[i].data = & data;
@@ -75,7 +79,7 @@ int	main(int ac, char **av)
 		i++;
 	}
 	i = 0;
-	while (i < data.nbphilo)
+	while (i < data.nb_philo)
 	{
 		if (pthread_create(&data.phils[i], NULL, &process_func, &philo[i])) 
 		// 2 arg is attribute/for customization 3 func for execute 4 arg for proc func
@@ -86,7 +90,7 @@ int	main(int ac, char **av)
 		i++;
 	}
 	i = 0;
-	while (i < data.nbphilo)
+	while (i < data.nb_philo)
 	{
 		if (pthread_join(data.phils[i], NULL))
 		{
