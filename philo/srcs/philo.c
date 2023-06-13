@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/06/12 17:47:30 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:28:00 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,14 @@ long int	gettodaystime(void)
 }
 
 void	*process_func(void *arg)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)arg;
+	
+}
+
+void	*setting_time(void *arg)
 {
 	t_philo *philo;
 
@@ -54,7 +62,7 @@ int	main(int ac, char **av)
 	t_philo			*philo;
 	//each philo should be a thread
 	int	i;
-	char *str = "hello";
+	char *str = "hello\n";
 	//printf("%li\n", gettodaystime());
 	if (ac != 6)
 		return (printf("NOT VALID AMOUNT OF ARGUMENTS\n"), 1);
@@ -67,6 +75,9 @@ int	main(int ac, char **av)
 	data.phils = malloc(sizeof(pthread_t) * data.nb_philo);
 	if (!data.phils)
 		return (free(philo), 1);
+	data.spoon = malloc(sizeof(pthread_mutex_t) * data.nb_philo);
+	if (!data.spoon)
+		return (free(philo), free(data.phils), 1);
 	i = 0;
 	data.set_to_zero = gettodaystime();
 	data.philo = philo;
@@ -75,6 +86,7 @@ int	main(int ac, char **av)
 	{
 		philo[i].id = i + 1;
 		philo[i].data = & data;
+		//
 		philo[i].str = str;
 		i++;
 	}
@@ -99,7 +111,7 @@ int	main(int ac, char **av)
 		}
 		i++;
 	}
-	// pthread_mutexattr_destroy(&mutex);
+	// pthread_mutex_destroy(&mutex);
 }
 
 /*

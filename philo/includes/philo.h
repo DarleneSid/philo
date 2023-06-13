@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:18:33 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/06/12 17:39:33 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:20:18 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct t_data
 	long int	set_to_zero;
 	struct t_philo		*philo;
 	pthread_mutex_t	print;
+	pthread_mutex_t *spoon;
 	pthread_t	*phils;
 }				t_data;
 
