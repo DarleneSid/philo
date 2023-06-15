@@ -6,7 +6,7 @@ DIR_SRCS_B		=	bonus
 
 DIR_OBJS		=	objs
 
-SRCS_NAMES		=	philo.c parsing.c
+SRCS_NAMES		=	philo.c parsing.c process.c
 
 OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
 

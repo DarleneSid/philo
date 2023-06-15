@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:18:33 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/06/13 19:20:18 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:55:52 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,22 @@ typedef struct t_data
 	int			t_t_sleep;
 	int			t_t_eat;
 	int			max_eat;
+	int			death;
 	long int	set_to_zero;
 	struct t_philo		*philo;
 	pthread_mutex_t	print;
 	pthread_mutex_t *spoon;
 	pthread_t	*phils;
+	pthread_t	*check_time;
 }				t_data;
 
 typedef struct t_philo
 {
 	char		*str;
 	int			id;
+	long int	last_lunch;
+	pthread_mutex_t *l_spoon;
+	pthread_mutex_t *r_spoon;
 	t_data		*data;
 }				t_philo;
 
@@ -49,5 +54,7 @@ int			ft_atoi(char *n);
 long int	gettodaystime(void);
 void		*process_func(void *arg);
 void		init(t_data *data, char **av);
+
+void	*check_time_pass(void *arg);
 
 #endif

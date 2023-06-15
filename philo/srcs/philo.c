@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/06/13 19:28:00 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/06/15 20:01:29 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,9 @@ long int	gettodaystime(void)
 	// printf("seconds : %ld\nmicro seconds : %ld", val.tv_sec, val.tv_usec);
 }
 
-void	*process_func(void *arg)
-{
-	t_philo *philo;
-
-	philo = (t_philo *)arg;
-	
-}
-
 void	*setting_time(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	// pthread_mutex_lock(&mutex);
@@ -54,6 +46,7 @@ void	init(t_data *data, char **av)
 	data->t_t_sleep = ft_atoi(av[3]);
 	data->t_t_eat = ft_atoi(av[4]);
 	data->max_eat = ft_atoi(av[5]);
+	data->death = 1;
 }
 
 int	main(int ac, char **av)
@@ -81,12 +74,18 @@ int	main(int ac, char **av)
 	i = 0;
 	data.set_to_zero = gettodaystime();
 	data.philo = philo;
+	init(&data, av);
 	pthread_mutex_init(&data.print, NULL);
 	while (i < data.nb_philo)
 	{
 		philo[i].id = i + 1;
 		philo[i].data = & data;
 		//
+		philo[i].l_spoon = &(data.spoon[i]);
+		if (philo[i].id == data.nb_philo)
+			philo[i].r_spoon = &(data.spoon[0]);
+		else
+			philo[i].r_spoon = &(data.spoon[i + 1]);
 		philo[i].str = str;
 		i++;
 	}
@@ -94,6 +93,27 @@ int	main(int ac, char **av)
 	while (i < data.nb_philo)
 	{
 		if (pthread_create(&data.phils[i], NULL, &process_func, &philo[i])) 
+		// 2 arg is attribute/for customization 3 func for execute 4 arg for proc func
+		{
+			// perror("CREATION OF THREAD FAILED\n");
+			// return (1);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < data.nb_philo)
+	{
+		if (pthread_join(data.phils[i], NULL))
+		{
+			// perror("CREATION OF THREAD FAILED\n");
+			// return (1);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < data.nb_philo)
+	{
+		if (pthread_create(&data.phils[i], NULL, &check_time_pass, &philo[i])) 
 		// 2 arg is attribute/for customization 3 func for execute 4 arg for proc func
 		{
 			// perror("CREATION OF THREAD FAILED\n");
