@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:18:33 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/06/15 17:55:52 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/07/29 20:48:27 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int			ft_atoi(char *n);
 /*		PHILO		*/
 long int	gettodaystime(void);
 void		*process_func(void *arg);
-void		init(t_data *data, char **av);
+void	init(t_data *data, char **av, int ac);
 
-void	*check_time_pass(void *arg);
+int	check_time_pass(void *arg);
 
 #endif
