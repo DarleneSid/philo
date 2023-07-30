@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:18:33 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/07/29 20:48:27 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/07/30 21:01:47 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ long int	gettodaystime(void);
 void		*process_func(void *arg);
 void	init(t_data *data, char **av, int ac);
 
-int	check_time_pass(void *arg);
+void	*check_time_pass(void *arg);
 
 #endif

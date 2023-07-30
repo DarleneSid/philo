@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/07/29 19:28:04 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/07/30 21:01:00 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	*setting_time(void *arg)
 void	init(t_data *data, char **av, int ac)
 {
 	data->t_t_die = ft_atoi(av[2]);
-	data->t_t_sleep = ft_atoi(av[3]);
-	data->t_t_eat = ft_atoi(av[4]);
+	data->t_t_eat = ft_atoi(av[3]);
+	data->t_t_sleep = ft_atoi(av[4]);
 	if (ac == 6)
 		data->max_eat = ft_atoi(av[5]);
 	data->death = 1;
@@ -68,6 +68,9 @@ int	main(int ac, char **av)
 		return (1);
 	data.phils = malloc(sizeof(pthread_t) * data.nb_philo);
 	if (!data.phils)
+		return (free(philo), 1);
+	data.check_time = malloc(sizeof(pthread_t) * data.nb_philo);
+	if (!data.check_time)
 		return (free(philo), 1);
 	data.spoon = malloc(sizeof(pthread_mutex_t) * data.nb_philo);
 	if (!data.spoon)
@@ -104,17 +107,7 @@ int	main(int ac, char **av)
 	i = 0;
 	while (i < data.nb_philo)
 	{
-		if (pthread_join(data.phils[i], NULL))
-		{
-			// perror("CREATION OF THREAD FAILED\n");
-			// return (1);
-		}
-		i++;
-	}
-	i = 0;
-	while (i < data.nb_philo)
-	{
-		if (pthread_create(&data.phils[i], NULL, &check_time_pass, &philo[i])) 
+		if (pthread_create(&data.check_time[i], NULL, &check_time_pass, &philo[i])) 
 		// 2 arg is attribute/for customization 3 func for execute 4 arg for proc func
 		{
 			// perror("CREATION OF THREAD FAILED\n");
@@ -126,6 +119,16 @@ int	main(int ac, char **av)
 	while (i < data.nb_philo)
 	{
 		if (pthread_join(data.phils[i], NULL))
+		{
+			// perror("CREATION OF THREAD FAILED\n");
+			// return (1);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < data.nb_philo)
+	{
+		if (pthread_join(data.check_time[i], NULL))
 		{
 			// perror("CREATION OF THREAD FAILED\n");
 			// return (1);
