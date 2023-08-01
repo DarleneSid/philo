@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/07/29 19:28:04 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/01 23:24:34 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ long int	gettodaystime(void)
 	if (gettimeofday(&current, NULL) == -1)
 		return (-1);
 	return ((current.tv_sec * 1000) + (current.tv_usec / 1000));
-	// printf("seconds : %ld\nmicro seconds : %ld", val.tv_sec, val.tv_usec);
 }
 
 void	*setting_time(void *arg)
@@ -55,8 +54,6 @@ int	main(int ac, char **av)
 	t_philo			*philo;
 	//each philo should be a thread
 	int	i;
-	char *str = "hello\n";
-	//printf("%li\n", gettodaystime());
 	if (ac < 5 || ac > 6)
 		return (printf("NOT VALID AMOUNT OF ARGUMENTS\n"), 1);
 	if (check_valid_args(av))
@@ -79,17 +76,23 @@ int	main(int ac, char **av)
 	data.philo = philo;
 	init(&data, av, ac);
 	pthread_mutex_init(&data.print, NULL);
+	pthread_mutex_init(&data.deathchecker, NULL);
 	while (i < data.nb_philo)
 	{
 		philo[i].id = i + 1;
 		philo[i].data = & data;
+		pthread_mutex_init(&philo[i].lunchchecker, NULL);
 		philo[i].l_spoon = &(data.spoon[i]);
 		if (philo[i].id == data.nb_philo)
 			philo[i].r_spoon = &(data.spoon[0]);
 		else
 			philo[i].r_spoon = &(data.spoon[i + 1]);
-		philo[i].str = str;
 		i++;
+	}
+	if (data.nb_philo == 1)
+	{
+		just_one_philo(philo);
+		return (1);
 	}
 	i = 0;
 	while (i < data.nb_philo)
@@ -103,17 +106,7 @@ int	main(int ac, char **av)
 		i++;
 	}
 	i = 0;
-	while (i < data.nb_philo)
-	{
-		if (pthread_create(&data.check_time[i], NULL, &check_time_pass, &philo[i])) 
-		// 2 arg is attribute/for customization 3 func for execute 4 arg for proc func
-		{
-			// perror("CREATION OF THREAD FAILED\n");
-			// return (1);
-		}
-		i++;
-	}
-	i = 0;
+	pthread_create(&data.watcher, NULL, &check_time_pass, &data); 
 	while (i < data.nb_philo)
 	{
 		if (pthread_join(data.phils[i], NULL))
@@ -123,17 +116,7 @@ int	main(int ac, char **av)
 		}
 		i++;
 	}
-	i = 0;
-	while (i < data.nb_philo)
-	{
-		if (pthread_join(data.check_time[i], NULL))
-		{
-			// perror("CREATION OF THREAD FAILED\n");
-			// return (1);
-		}
-		i++;
-	}
-	// pthread_mutex_destroy(&mutex);
+	pthread_join(data.watcher, NULL);
 }
 
 /*

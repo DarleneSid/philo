@@ -22,7 +22,7 @@ CC				=	cc
 
 CDFLAGS 		=	-MMD -MP
 
-CFLAGS			=	-Wall -Werror -Wextra 
+CFLAGS			=	-Wall -Werror -Wextra  -pthread #-fsanitize=thread
 
 all:	${NAME}
 
