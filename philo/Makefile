@@ -22,7 +22,7 @@ CC				=	cc
 
 CDFLAGS 		=	-MMD -MP
 
-CFLAGS			=	-Wall -Werror -Wextra
+CFLAGS			=	-Wall -Werror -Wextra 
 
 all:	${NAME}
 
@@ -35,7 +35,7 @@ $(OBJS) : $(DIR_OBJS)/%.o : $(DIR_SRCS)/%.c
 	$(CC) -g3 $(CFLAGS) $(CDFLAGS) $(INC) -c $< -o $@ 
 
 $(NAME): $(DIR_OBJS) $(OBJS) 
-	$(CC) -g3 ${INC} $(OBJS) $(LIB) -o $(NAME)
+	$(CC) -g3 ${INC} $(OBJS) $(LIB) -o $(NAME) -lpthread
 	@echo "\033[31;5mphilo\033[0m"
 
 clean:
