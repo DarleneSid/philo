@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/01 23:24:34 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/05 21:33:27 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	init(t_data *data, char **av, int ac)
 	data->t_t_sleep = ft_atoi(av[3]);
 	data->t_t_eat = ft_atoi(av[4]);
 	if (ac == 6)
-		data->max_eat = ft_atoi(av[5]);
+		data->max_eat = ft_atoi(av[5]) * data->nb_philo;
 	data->death = 1;
 }
 
@@ -52,8 +52,8 @@ int	main(int ac, char **av)
 {
 	static t_data	data = {0};
 	t_philo			*philo;
-	//each philo should be a thread
 	int	i;
+
 	if (ac < 5 || ac > 6)
 		return (printf("NOT VALID AMOUNT OF ARGUMENTS\n"), 1);
 	if (check_valid_args(av))
@@ -76,10 +76,12 @@ int	main(int ac, char **av)
 	data.philo = philo;
 	init(&data, av, ac);
 	pthread_mutex_init(&data.print, NULL);
+	pthread_mutex_init(&data.eatchecker, NULL);
 	pthread_mutex_init(&data.deathchecker, NULL);
 	while (i < data.nb_philo)
 	{
 		philo[i].id = i + 1;
+		philo[i].eaten = 0;
 		philo[i].data = & data;
 		pthread_mutex_init(&philo[i].lunchchecker, NULL);
 		philo[i].l_spoon = &(data.spoon[i]);
@@ -98,7 +100,6 @@ int	main(int ac, char **av)
 	while (i < data.nb_philo)
 	{
 		if (pthread_create(&data.phils[i], NULL, &process_func, &philo[i])) 
-		// 2 arg is attribute/for customization 3 func for execute 4 arg for proc func
 		{
 			// perror("CREATION OF THREAD FAILED\n");
 			// return (1);

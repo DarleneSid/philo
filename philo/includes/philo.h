@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:18:33 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/01 23:24:02 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/05 21:33:07 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct t_data
 	struct t_philo		*philo;
 	pthread_mutex_t	print;
 	pthread_mutex_t	deathchecker;
+	pthread_mutex_t	eatchecker;
 	pthread_mutex_t *spoon;
 	pthread_t	*phils;
 	pthread_t	watcher;
@@ -42,6 +43,7 @@ typedef struct t_data
 typedef struct t_philo
 {
 	int			id;
+	int			eaten;
 	long int	last_lunch;
 	pthread_mutex_t	lunchchecker;
 	pthread_mutex_t *l_spoon;

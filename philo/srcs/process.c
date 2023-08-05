@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 15:49:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/01 23:27:35 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/05 22:43:13 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ void *check_time_pass(void *arg)
 		i = 0;
 		while (i < data->nb_philo)
 		{
-			// fprintf(stderr, "->>>%li\n", data->philo[i].last_lunch);
-			// fprintf(stderr, "%li >= %i\n", gettodaystime() - data->set_to_zero - data->philo[i].last_lunch, data->t_t_die);
 			pthread_mutex_lock(&data->philo[i].lunchchecker);
 			if (gettodaystime() - data->set_to_zero - data->philo[i].last_lunch >= data->t_t_die)
 			{
@@ -50,6 +48,16 @@ void *check_time_pass(void *arg)
 				return NULL;
 			}
 			pthread_mutex_unlock(&data->philo[i].lunchchecker);
+			pthread_mutex_lock(&data->eatchecker);
+			if (data->max_eat == 0)
+			{
+				pthread_mutex_unlock(&data->eatchecker);
+				pthread_mutex_lock(&data->deathchecker);
+				data->death = 0;
+				pthread_mutex_unlock(&data->deathchecker);
+				return NULL;
+			}
+			pthread_mutex_unlock(&data->eatchecker);
 			i++;
 		}
 	}
@@ -79,7 +87,10 @@ void	*right_fork(void *arg)
 		pthread_mutex_unlock(philo->l_spoon);
 		return ("DIE");
 	}
-	philo->data->max_eat++;
+	philo->eaten++;
+	pthread_mutex_lock(&philo->data->eatchecker);
+	philo->data->max_eat--;
+	pthread_mutex_unlock(&philo->data->eatchecker);
 	philo->last_lunch = gettodaystime() - philo->data->set_to_zero;
 	usleep(philo->data->t_t_eat * 1000);
 	pthread_mutex_unlock(philo->r_spoon);
@@ -111,7 +122,10 @@ void	*left_fork(void *arg)
 		pthread_mutex_unlock(philo->r_spoon);
 		return ("DIE");
 	}
-	philo->data->max_eat++;
+	philo->eaten++;
+	pthread_mutex_lock(&philo->data->eatchecker);
+	philo->data->max_eat--;
+	pthread_mutex_unlock(&philo->data->eatchecker);
 	pthread_mutex_lock(&philo->lunchchecker);
 	philo->last_lunch = gettodaystime() - philo->data->set_to_zero;
 	pthread_mutex_unlock(&philo->lunchchecker);
@@ -130,9 +144,8 @@ void	*process_func(void *arg)
 		usleep(10);
 	while (1)
 	{
-		if ((philo->data->nb_philo % 2 != 0) && philo->data->max_eat > 0)
+		if ((philo->data->nb_philo % 2 != 0) && philo->eaten > 0)
 		{
-			// fprintf(stderr, "%i: impair et mange\n", philo->id);
 			usleep(philo->data->t_t_die * 0.25);
 		}
 		pthread_mutex_lock(&philo->data->deathchecker);
