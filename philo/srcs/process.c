@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 15:49:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/05 22:43:13 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/05 23:05:48 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,19 @@ void *check_time_pass(void *arg)
 				return NULL;
 			}
 			pthread_mutex_unlock(&data->philo[i].lunchchecker);
-			pthread_mutex_lock(&data->eatchecker);
-			if (data->max_eat == 0)
+			if (data->max_eat)
 			{
+				pthread_mutex_lock(&data->eatchecker);
+				if (data->max_eat == 0)
+				{
+					pthread_mutex_unlock(&data->eatchecker);
+					pthread_mutex_lock(&data->deathchecker);
+					data->death = 0;
+					pthread_mutex_unlock(&data->deathchecker);
+					return NULL;
+				}
 				pthread_mutex_unlock(&data->eatchecker);
-				pthread_mutex_lock(&data->deathchecker);
-				data->death = 0;
-				pthread_mutex_unlock(&data->deathchecker);
-				return NULL;
 			}
-			pthread_mutex_unlock(&data->eatchecker);
 			i++;
 		}
 	}
