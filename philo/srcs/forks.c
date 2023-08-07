@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 15:21:21 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/07 16:43:04 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/07 17:09:22 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,6 @@ void	*die_right_fork(void *arg)
 	if (print_msg(philo, "taken a fork"))
 	{
 		pthread_mutex_unlock(philo->r_spoon);
-		return ("DIED");
-	}
-	pthread_mutex_lock(philo->l_spoon);
-	if (print_msg(philo, "taken a fork"))
-	{
-		pthread_mutex_unlock(philo->r_spoon);
 		pthread_mutex_unlock(philo->l_spoon);
 		return ("DIED");
 	}
@@ -60,6 +54,12 @@ void	*right_fork(void *arg)
 
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(philo->r_spoon);
+	if (print_msg(philo, "taken a fork"))
+	{
+		pthread_mutex_unlock(philo->r_spoon);
+		return ("DIED");
+	}
+	pthread_mutex_lock(philo->l_spoon);
 	die_right_fork(philo);
 	philo->eaten++;
 	pthread_mutex_lock(&philo->data->eatchecker);
@@ -77,12 +77,6 @@ void	*die_left_fork(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (print_msg(philo, "taken a fork"))
-	{
-		pthread_mutex_unlock(philo->l_spoon);
-		return ("DIED");
-	}
-	pthread_mutex_lock(philo->r_spoon);
 	if (print_msg(philo, "taken a fork"))
 	{
 		pthread_mutex_unlock(philo->l_spoon);
@@ -104,6 +98,12 @@ void	*left_fork(void *arg)
 
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(philo->l_spoon);
+	if (print_msg(philo, "taken a fork"))
+	{
+		pthread_mutex_unlock(philo->l_spoon);
+		return ("DIED");
+	}
+	pthread_mutex_lock(philo->r_spoon);
 	die_left_fork(philo);
 	philo->eaten++;
 	pthread_mutex_lock(&philo->data->eatchecker);
