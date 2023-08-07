@@ -6,7 +6,7 @@ DIR_SRCS_B		=	bonus
 
 DIR_OBJS		=	objs
 
-SRCS_NAMES		=	philo.c parsing.c process.c
+SRCS_NAMES		=	philo.c parsing.c process.c forks.c
 
 OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
 
@@ -22,7 +22,7 @@ CC				=	cc
 
 CDFLAGS 		=	-MMD -MP
 
-CFLAGS			=	-Wall -Werror -Wextra  -pthread #-fsanitize=thread
+CFLAGS			=	-Wall -Werror -Wextra  -pthread
 
 all:	${NAME}
 

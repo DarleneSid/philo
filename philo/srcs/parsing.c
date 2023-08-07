@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:21:08 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/05/30 15:16:55 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:42:47 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_valid_args(char **av)
 {
 	int	n_av;
 	int	is_av;
-	
+
 	n_av = 1;
 	while (av[n_av])
 	{
@@ -28,7 +28,7 @@ int	check_valid_args(char **av)
 				printf("NOT VALID ARGUMENT: %s\n", av[n_av]);
 				return (1);
 			}
-			is_av++;			
+			is_av++;
 		}
 		n_av++;
 	}
@@ -37,23 +37,17 @@ int	check_valid_args(char **av)
 
 int	ft_atoi(char *n)
 {
-	int	sign;
 	int	res;
 	int	i;
 
-	sign = 1;
 	res = 0;
 	i = 0;
 	if (n[i] == ' ' || (n[i] >= 9 && n[i] <= 13))
 		i++;
-	if (n[i] == '-' || n[i] == '+')
-		i++;
-	if (n[i] == '-')
-		sign = -1;
 	while (n[i] >= '0' && n[i] <= '9')
 	{
 		res = res * 10 + n[i] - '0';
-		i++; 
+		i++;
 	}
-	return (res * sign);
+	return (res);
 }

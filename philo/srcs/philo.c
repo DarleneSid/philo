@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/05 21:33:27 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:37:41 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,12 @@ void	*setting_time(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	// pthread_mutex_lock(&mutex);
-	// some actions inside
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->print);
 		printf("[%ld] %i\n", gettodaystime() - philo->data->set_to_zero, philo->id); //("my id is %i\n", philo->id);
 		pthread_mutex_unlock(&philo->data->print);
 	}
-	// pthread_mutex_unlock(&mutex);
 	return (0);
 }
 
