@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:19:10 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/07 15:37:41 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:41:29 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,35 @@ long int	gettodaystime(void)
 		return (-1);
 	return ((current.tv_sec * 1000) + (current.tv_usec / 1000));
 }
+
+int	my_usleep(long int duration, t_philo *philo)
+{
+	long int	start;
+	long int	current;
+
+	(void)philo;
+	start = -1;
+	start = gettodaystime();
+	if (start == -1)
+		return (1);
+	else
+	{
+		while (1)
+		{
+			current = gettodaystime() - start;
+			if (current >= duration)
+				break ;
+			if (duration - current > 1000)
+				usleep(100);
+			else
+				usleep((duration - current) / 10);
+			if (philo->data->death == 0)
+				return (1);
+		}
+	}
+	return (0);
+}
+
 
 void	*setting_time(void *arg)
 {

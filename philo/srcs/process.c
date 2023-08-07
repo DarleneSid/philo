@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 15:49:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/07 15:25:43 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:43:13 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	*process_func(void *arg)
 		}
 		if (print_msg(philo, "is sleeping"))
 			return (NULL);
-		usleep(philo->data->t_t_sleep * 1000);
+		my_usleep(philo->data->t_t_sleep, philo);
 		if (print_msg(philo, "is thinking"))
 			return (NULL);
 	}
@@ -97,7 +97,7 @@ void	*just_one_philo(void *arg)
 
 	philo = (t_philo *)arg;
 	print_msg(philo, "taken a fork");
-	usleep(philo->data->t_t_die * 1000);
+	my_usleep(philo->data->t_t_die, philo);
 	print_msg(philo, "died");
 	return NULL;
 }

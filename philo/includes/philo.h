@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 13:18:33 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/08/07 15:46:07 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:41:12 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int			ft_atoi(char *n);
 long int	gettodaystime(void);
 void		*setting_time(void *arg);
 void		init(t_data *data, char **av, int ac);
+int	my_usleep(long int duration, t_philo *philo);
 
 /*		FORKS		*/
 void		*print_msg(t_philo *philo, char *str);
